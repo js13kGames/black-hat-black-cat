@@ -1,0 +1,40 @@
+@import "./game.css";
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: transparent;
+    color: var(--color-text-primary);
+    border: 2px solid var(--green-700);
+}
+
+button:hover,
+button:active {
+    background-color: var(--green-700);
+    color: black;
+}
+
+.tempo-list {
+    margin-top: 20px;
+}
+
+#level-state-ui {
+    p {
+        color: var(--green-700);
+        font-family: monospace;
+    }
+}

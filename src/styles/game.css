@@ -1,73 +1,121 @@
- html,
- body {
-     margin: 0;
-     background: black;
-     color: #00ff00;
-     font-family: monospace;
-     font-size: 16px;
-     overflow: hidden;
- }
+:root {
+    --green-700: #00ff00;
+    --color-text-primary: var(--green-700);
+}
 
- body::before {
-     content: "";
-     position: absolute;
-     width: 100%;
-     height: 100%;
-     background: repeating-linear-gradient(to bottom,
-             rgba(0, 255, 0, 0.03),
-             rgba(0, 255, 0, 0.03) 1px,
-             transparent 1px,
-             transparent 3px);
-     pointer-events: none;
- }
+html,
+body {
+    margin: 0;
+    background: black;
+    color: var(--color-text-primary);
+    font-family: monospace;
+    font-size: 16px;
+    overflow: hidden;
+}
 
- #terminal {
-     white-space: pre-wrap;
-     padding: 1em;
-     line-height: 1.5;
-     animation: flicker 0.15s infinite alternate;
- }
+* {
+    font-family: monospace;
+}
 
- #inputLine::after {
-     content: "_";
-     animation: blink 1s infinite step-start;
- }
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 0, 0.1),
+        rgba(0, 255, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 1px,
+        rgba(0, 0, 0, 0.1) 3px
+    );
+    pointer-events: none;
+    z-index: 100;
+}
 
- #status {
-     position: absolute;
-     top: 0;
-     right: 0;
-     padding: 0.5em;
-     color: red;
-     font-size: 14px;
- }
+#terminal {
+    white-space: pre-wrap;
+    padding: 1em;
+    line-height: 1.5;
+    animation: flicker 0.15s infinite alternate;
+}
 
- .flash {
-     animation: flashBg 0.15s;
- }
+#inputLine::after {
+    content: "_";
+    animation: blink 1s infinite step-start;
+}
 
- @keyframes blink {
-     50% {
-         opacity: 0;
-     }
- }
+#status {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5em;
+    color: red;
+    font-size: 14px;
+}
 
- @keyframes flicker {
-     0% {
-         opacity: 1;
-     }
+.flash {
+    animation: flashBg 0.15s;
+}
 
-     100% {
-         opacity: 0.98;
-     }
- }
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
 
- @keyframes flashBg {
-     from {
-         background-color: darkred;
-     }
+@keyframes flicker {
+    0% {
+        opacity: 1;
+    }
 
-     to {
-         background-color: black;
-     }
- }
+    100% {
+        opacity: 0.98;
+    }
+}
+
+@keyframes flashBg {
+    from {
+        background-color: darkred;
+    }
+
+    to {
+        background-color: black;
+    }
+}
+
+#wavyCanvas {
+    position: absolute;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    width: 100%;
+    min-width: 500px;
+    max-width: 800px;
+    /*height:100%;*/
+    pointer-events: none;
+    image-rendering: pixelated;
+    background-color: transparent;
+}
+
+#notes-canvas {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+    height: 100%;
+    pointer-events: none;
+    image-rendering: pixelated;
+    background-color: transparent;
+}
+
+#ascii-cat {
+    position: absolute;
+    top: 60%;
+    transform: translate(-70%, -50%);
+    left: 50%;
+    pointer-events: none;
+    user-select: none;
+    font-size: clamp(16px, 2vw, 25px);
+}

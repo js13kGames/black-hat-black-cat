@@ -2,6 +2,9 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
 let tempo = 110 // BPM
 let beatLength = 60 / tempo // seconds per beat
 
+const mainGain = audioCtx.createGain()
+mainGain.connect(audioCtx.destination)
+
 // Simple synth voice
 function playNote(
   freq,
@@ -21,7 +24,7 @@ function playNote(
   gain.gain.linearRampToValueAtTime(vol, time + 0.01)
   gain.gain.exponentialRampToValueAtTime(0.001, time + duration)
 
-  osc.connect(gain).connect(audioCtx.destination)
+  osc.connect(gain).connect(mainGain)
   osc.start(time)
   osc.stop(time + duration)
 }
@@ -49,7 +52,7 @@ function snare(time) {
   filter.type = 'highpass'
   filter.frequency.setValueAtTime(1000, time)
 
-  noise.connect(filter).connect(gain).connect(audioCtx.destination)
+  noise.connect(filter).connect(gain).connect(mainGain)
   noise.start(time)
   noise.stop(time + 0.2)
 }
@@ -72,7 +75,7 @@ function hihat(time) {
   filter.type = 'highpass'
   filter.frequency.setValueAtTime(5000, time)
 
-  noise.connect(filter).connect(gain).connect(audioCtx.destination)
+  noise.connect(filter).connect(gain).connect(mainGain)
   noise.start(time)
   noise.stop(time + 0.05)
 }
@@ -84,6 +87,7 @@ const melody = [220, 247, 220, 262, 0, 220, 196, 0] // sneaky "typing" melody
 // Scheduler
 let nextNoteTime = 0
 let currentBeat = 0
+let stopped = false
 
 function schedule() {
   while (nextNoteTime < audioCtx.currentTime + 0.1) {
@@ -105,15 +109,26 @@ function schedule() {
     nextNoteTime += beatLength / 2 // 8th notes
     currentBeat++
   }
+
+  if (stopped) return
+
   requestAnimationFrame(schedule)
 }
 
 // Start playback
-function startSong() {
+export function startSong() {
+  stopped = false
   if (audioCtx.state === 'suspended') audioCtx.resume()
   nextNoteTime = audioCtx.currentTime + 0.1
   currentBeat = 0
   schedule()
 }
 
-document.addEventListener('click', () => startSong())
+export function stopSong() {
+  console.log('stop song')
+
+  mainGain.gain.setValueAtTime(0, 0)
+  stopped = true
+}
+
+//document.addEventListener('click', () => startSong())
